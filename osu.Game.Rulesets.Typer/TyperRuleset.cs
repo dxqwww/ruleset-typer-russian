@@ -19,7 +19,7 @@ namespace osu.Game.Rulesets.Typer
 {
     public class TyperRuleset : Ruleset
     {
-        public override string Description => "a very typer ruleset";
+        public override string Description => "Z-Typer. Знай наших.";
 
         public override DrawableRuleset CreateDrawableRulesetWith(IBeatmap beatmap, IReadOnlyList<Mod> mods = null) => new DrawableTyperRuleset(this, beatmap, mods);
 
@@ -51,7 +51,7 @@ namespace osu.Game.Rulesets.Typer
         {
             Anchor = Anchor.Centre,
             Origin = Anchor.Centre,
-            Text = ShortName[0].ToString(),
+            Text = "Z",
             Font = OsuFont.Default.With(size: 18),
         };
 
