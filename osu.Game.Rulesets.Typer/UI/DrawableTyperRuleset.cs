@@ -12,6 +12,7 @@ using osu.Game.Input.Handlers;
 using osu.Game.Replays;
 using osu.Game.Rulesets.Mods;
 using osu.Game.Rulesets.Objects.Drawables;
+using osu.Game.Rulesets.Typer.Beatmaps;
 using osu.Game.Rulesets.Typer.Objects;
 using osu.Game.Rulesets.Typer.Objects.Drawables;
 using osu.Game.Rulesets.Typer.Replays;
@@ -23,7 +24,7 @@ namespace osu.Game.Rulesets.Typer.UI
     [Cached]
     public partial class DrawableTyperRuleset : DrawableScrollingRuleset<TyperHitObject>
     {
-        private readonly Random beatmapSeed;
+        private readonly ZRandom keyGenerator;
 
         public DrawableTyperRuleset(TyperRuleset ruleset, IBeatmap beatmap, IReadOnlyList<Mod> mods = null)
             : base(ruleset, beatmap, mods)
@@ -31,18 +32,18 @@ namespace osu.Game.Rulesets.Typer.UI
             Direction.Value = ScrollingDirection.Left;
             TimeRange.Value = 10000;
 
-            beatmapSeed = acquireBeatmapSeed(beatmap.BeatmapInfo.MD5Hash);
+            keyGenerator = createKeyGenerator(beatmap.BeatmapInfo.MD5Hash);
         }
 
         protected override Playfield CreatePlayfield() => new TyperPlayfield();
 
         protected override ReplayInputHandler CreateReplayInputHandler(Replay replay) => new TyperFramedReplayInputHandler(replay);
 
-        public override DrawableHitObject<TyperHitObject> CreateDrawableRepresentation(TyperHitObject h) => new DrawableTyperHitObject(h, beatmapSeed);
+        public override DrawableHitObject<TyperHitObject> CreateDrawableRepresentation(TyperHitObject h) => new DrawableTyperHitObject(h, keyGenerator);
 
         protected override PassThroughInputManager CreateInputManager() => new TyperInputManager(Ruleset?.RulesetInfo);
 
-        private static Random acquireBeatmapSeed(string beatmapHash)
+        private static ZRandom createKeyGenerator(string beatmapHash)
         {
             byte[] bytes = Convert.FromHexString(beatmapHash);
 
@@ -57,7 +58,7 @@ namespace osu.Game.Rulesets.Typer.UI
 
             int seed = chunks.Aggregate(0, (a, e) => a ^ e);
 
-            return new Random(seed);
+            return new ZRandom(seed);
         }
     }
 }
