@@ -16,6 +16,7 @@ using osu.Game.Graphics;
 using osu.Game.Graphics.Sprites;
 using osu.Game.Rulesets.Objects.Drawables;
 using osu.Game.Rulesets.Scoring;
+using osu.Game.Rulesets.Typer.Beatmaps;
 using osuTK;
 using osuTK.Graphics;
 using osuTK.Input;
@@ -34,7 +35,7 @@ namespace osu.Game.Rulesets.Typer.Objects.Drawables
 
         private readonly Dictionary<char, char> engToRusMap;
 
-        public DrawableTyperHitObject(TyperHitObject hitObject, Random seed)
+        public DrawableTyperHitObject(TyperHitObject hitObject, ZRandom generator)
             : base(hitObject)
         {
             engToRusMap = "йцукенгшщзхъфывапролджэячсмитьбю."
@@ -46,7 +47,7 @@ namespace osu.Game.Rulesets.Typer.Objects.Drawables
             Origin = Anchor.CentreLeft;
             Anchor = Anchor.CentreLeft;
 
-            keyToHit = (char)seed.Next('а', 'я' + 1);
+            keyToHit = generator.Next();
 
             AddRangeInternal(new Drawable[]
             {
